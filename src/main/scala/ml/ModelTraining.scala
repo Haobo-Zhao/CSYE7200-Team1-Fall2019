@@ -1,17 +1,11 @@
 package ml
 
-import org.apache.spark.{SparkConf, SparkContext}
+import conf.AppConf
 import org.apache.spark.mllib.recommendation.{ALS, Rating}
-import org.apache.spark.sql.hive.HiveContext
 
-object ModelTraining {
+object ModelTraining extends AppConf {
   def main(args: Array[String]) {
     //model training
-    val localClusterURL = "local[2]"
-    val conf = new SparkConf().setAppName("ModelTraining").setMaster(localClusterURL)
-    val sc = new SparkContext(conf)
-    val hc = new HiveContext(sc)
-
 
     val trainingData = hc.sql("select * from trainingData")
     val testData = hc.sql("select * from testData")

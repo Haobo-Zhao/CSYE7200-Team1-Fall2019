@@ -1,19 +1,11 @@
 package datacleaner
 
+import conf.AppConf
 import org.apache.spark.sql.{SQLContext, SaveMode}
-import org.apache.spark.sql.hive.HiveContext
-import org.apache.spark.{SparkConf, SparkContext}
 
-object RatingData {
+object RatingData extends AppConf {
   def main(args: Array[String]): Unit = {
-    val localClusterURL = "local[2]"
-    val clusterMasterURL = "spark://master:7077"
-    val conf = new SparkConf().setAppName("RatingData").setMaster(localClusterURL)
-    val sc = new SparkContext(conf)
-    val sqlContext = new SQLContext(sc)
-    val hc = new HiveContext(sc)
 
-//    val ratings = hc.sql("cache table ratings")
     val count = hc.sql("select count(*) from ratings").first().getLong(0).toInt
 //    val percent = 0.6
     val percent = 0.0001

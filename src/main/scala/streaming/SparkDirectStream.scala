@@ -1,25 +1,22 @@
 package streaming
 
+import conf.AppConf
 import kafka.serializer.StringDecoder
-
-import org.apache.spark._
-import org.apache.spark.sql._
 import org.apache.spark.sql.hive._
 import org.apache.spark.streaming._
 import org.apache.spark.streaming.kafka._
 import org.apache.spark.mllib.recommendation.MatrixFactorizationModel
 
-object SparkDirectStream {
+object SparkDirectStream extends AppConf {
   def main(args: Array[String]) {
 
-    val conf = new SparkConf().setAppName("SparkDirectStream").setMaster("spark://master:7077")
     val batchDuration = new Duration(5000)
     val ssc = new StreamingContext(conf, batchDuration)
     val hc = new HiveContext(ssc.sparkContext)
     val validusers = hc.sql("select * from trainingData")
     val userlist = validusers.select("userId")
 
-    val modelpath = "/tmp/bestmodel/0.8215454233270015"
+    val modelpath = "/tmp/bestmodel/0.7813647061246438"
     val broker = "master:9092"
     val topics = "test".split(",").toSet
     val kafkaParams = Map("bootstrap.servers" -> "master:9092")

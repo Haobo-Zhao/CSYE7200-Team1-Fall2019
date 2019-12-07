@@ -5,7 +5,7 @@ import org.apache.spark.ml.recommendation._
 import org.apache.spark.ml._
 
 object PipelineModel extends AppConf{
-  //通过Spark.ML的包来做DF的数据做机器学习，它封装的是一些high-level的API。可以直接使用dataframe来做训练集和测试集。
+  //use Spark.ML to do pipeline of recommender model
 
   def main(args: Array[String]): Unit = {
     val trainData = hc.sql("select * from trainingData").withColumnRenamed("userid", "user").withColumnRenamed("movieid", "item")

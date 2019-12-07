@@ -1,16 +1,10 @@
 package ml
 
-import org.apache.spark.{SparkConf, SparkContext}
+import conf.AppConf
 import org.apache.spark.mllib.recommendation.MatrixFactorizationModel
-import org.apache.spark.sql.hive.HiveContext
 
-object Recommender {
+object Recommender extends AppConf {
   def main(args: Array[String]): Unit = {
-
-    val localClusterURL = "local[2]"
-    val conf = new SparkConf().setAppName("Recommender").setMaster(localClusterURL)
-    val sc = new SparkContext(conf)
-    val hc = new HiveContext(sc)
 
     val users = hc.sql("select distinct(userId) from trainingData order by userId asc")
     val index = 1630
