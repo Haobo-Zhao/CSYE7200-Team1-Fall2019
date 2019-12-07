@@ -1,23 +1,13 @@
 package datacleaner
 
-import org.apache.spark.{SparkConf, SparkContext}
-import org.apache.spark.sql.hive.HiveContext
+import conf.AppConf
 import org.apache.spark.sql.SaveMode
 
-object PopularMovies {
+object PopularMovies extends AppConf {
   // recommend 5 movies to users
   def main(args: Array[String]): Unit = {
-    val localClusterURL = "local[2]"
-    val conf = new SparkConf().setAppName("PopularMovies").setMaster(localClusterURL)
-    val sc = new SparkContext(conf)
-    val hc = new HiveContext(sc)
     val pop = hc.sql("select count(*) as c ,movieId from trainingData group by movieId order by c desc")
-    //  val pop5 = pop.select("movieId").map(x=>x.getInt(0)).take(5)
-    //      for (i <- pop5) {
-    //      val moviename = hc.sql(s"select title from movies where movieId=$i").first().getString(0)
-    //      println(moviename)
-    //    }
-
+   
     val pop5 = pop.select("movieId").limit(5)
     pop5.registerTempTable("pop5")
 

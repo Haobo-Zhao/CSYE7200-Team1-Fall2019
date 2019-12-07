@@ -1,21 +1,14 @@
 package datacleaner
 
 import caseclass.{Links, Movies, Ratings, Tags}
-import org.apache.spark.sql.hive.HiveContext
-import org.apache.spark.sql.{SQLContext, SaveMode}
-import org.apache.spark.{SparkConf, SparkContext}
+import conf.AppConf
+import org.apache.spark.sql.SaveMode
 
-object ETL {
+object ETL extends AppConf {
   def main(args: Array[String]): Unit = {
-    val localClusterURL = "local[2]"
-    val clusterMasterURL = "spark://master:7077"
-    val conf = new SparkConf().setAppName("ETL").setMaster(localClusterURL)
-    val sc = new SparkContext(conf)
-    val sqlContext = new SQLContext(sc)
-    val hc = new HiveContext(sc)
-    import sqlContext.implicits._
 
     val minPartitions = 8
+    import sqlContext.implicits._
 
     val links = sc.textFile("data/links.txt", minPartitions) //d
       .filter { !_.endsWith(",") } //e

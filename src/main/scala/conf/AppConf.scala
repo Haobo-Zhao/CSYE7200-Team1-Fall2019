@@ -14,7 +14,7 @@ trait AppConf {
   val sqlContext = new SQLContext(sc)
   val hc = new HiveContext(sc)
 
-  //jdbc连接
+  //jdbc connect
 //  val jdbcURL = "jdbc:mysql://master:3306/hive_db"
   val jdbcURL = "jdbc:mysql://localhost:3306/hive_db"
   val recResultTable = "hive_db.user_movie_recommandation"
