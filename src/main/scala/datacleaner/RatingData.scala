@@ -44,8 +44,5 @@ object RatingData {
     hc.sql("create table if not exists testData(userId int,movieId int,rating double) stored as parquet")
     hc.sql("load data inpath '/tmp/testData' overwrite into table testData")
 
-//    val ratingRDD = hc.sql("select * from trainingData").rdd.map(x => Rating(x.getInt(0),x.getInt(1),x.getDouble(2)))
-
-//    val model = ALS.train(ratingRDD, 1, 10)
   }
 }

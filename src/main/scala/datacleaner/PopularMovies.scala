@@ -12,12 +12,7 @@ object PopularMovies {
     val sc = new SparkContext(conf)
     val hc = new HiveContext(sc)
     val pop = hc.sql("select count(*) as c ,movieId from trainingData group by movieId order by c desc")
-    //  val pop5 = pop.select("movieId").map(x=>x.getInt(0)).take(5)
-    //      for (i <- pop5) {
-    //      val moviename = hc.sql(s"select title from movies where movieId=$i").first().getString(0)
-    //      println(moviename)
-    //    }
-
+   
     val pop5 = pop.select("movieId").limit(5)
     pop5.registerTempTable("pop5")
 

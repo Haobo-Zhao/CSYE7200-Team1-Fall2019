@@ -17,10 +17,8 @@ object RecommendForAllUsers extends AppConf {
     while (allusers.hasNext) {
       val user = allusers.next()
       val rec = model.recommendProducts(user, 5)
-//      writeRecResultToSparkSQL(rec)
       writeRecResultToMysql(rec, sqlContext, sc)
-//      hc.sql("create table if not exists recommendresult(userId int, movieId int,rating Double) stored as parquet")
-//      hc.sql("load data inpath '/tmp/recommendResult' overwrite into table recommendresult")
+
     }
 
     def writeRecResultToMysql(uid: Array[Rating], sqlContext: SQLContext, sc: SparkContext) {
@@ -32,26 +30,6 @@ object RecommendForAllUsers extends AppConf {
       val uidDF = uidDFArray.map(_.split('|')).map(x => Result(x(0).trim().toInt, x(1).trim.toInt, x(2).trim().toDouble)).toDF
       uidDF.write.mode(SaveMode.Append).jdbc(jdbcURL, recResultTable, prop)
     }
-
-
-//    def writeRecResultToHbase(uid: Array[Rating], sqlContext: SQLContext, sc: SparkContext) {
-//      val uidString = uid.map(x => x.user.toString() + "|"
-//        + x.product.toString() + "|" + x.rating.toString())
-//      import sqlContext.implicits._
-//      val uidDF = sc.parallelize(uidString).map(_.split("|")).map(x => Result(x(0).trim().toInt, x(1).trim.toInt, x(2).trim().toDouble)).toDF
-//      uidDF.save("org.apache.phoenix.spark", SaveMode.Overwrite, Map("table" -> "phoenix_rec", "zkUrl" -> "localhost:2181"))
-//    }
   }
-
-
-//  def writeRecResultToSparkSQL(uid: Array[Rating]): Unit = {
-//    val uidString = uid.map(x => x.user.toString + "|"
-//              + x.product.toString + "|" + x.rating.toString)
-//    import sqlContext.implicits._
-//    val uidDFArray = sc.parallelize(uidString)
-//    val uidDF = uidDFArray.map(_.split('|')).map(x => Result(x(0).trim().toInt, x(1).trim.toInt, x(2).trim().toDouble)).toDF
-//    println(uidString)
-//    uidDF.write.mode(SaveMode.Append).parquet("/tmp/recommendResult")
-//  }
 
 }

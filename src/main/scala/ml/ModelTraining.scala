@@ -6,6 +6,7 @@ import org.apache.spark.sql.hive.HiveContext
 
 object ModelTraining {
   def main(args: Array[String]) {
+    //model training
     val localClusterURL = "local[2]"
     val conf = new SparkConf().setAppName("ModelTraining").setMaster(localClusterURL)
     val sc = new SparkContext(conf)
@@ -21,11 +22,11 @@ object ModelTraining {
     val testRDD = testData.rdd.map(x => Rating(x.getInt(0), x.getInt(1), x.getDouble(2)))
     val test2 = testRDD.map {case Rating(userid, movieid, rating) => ((userid, movieid), rating)}
 
-    //特征向量的个数
+
     val rank = 1
-    //正则因子
+
     val lambda = List(0.001, 0.005, 0.01, 0.015, 0.02, 0.1)
-    //迭代次数
+
 //    val iteration = List(10, 20, 30, 40)
 //    val iteration = List(5, 10, 15, 20)
     val iteration = List(2, 4, 8, 10)
@@ -49,7 +50,7 @@ object ModelTraining {
           err * err
       }.mean()
       val RMSE = math.sqrt(MSE)
-      //RMSE越小，代表模型越精确
+
       if (RMSE < bestRMSE) {
         model.save(sc, s"/tmp/BestModel/$RMSE")
         bestRMSE = RMSE
